@@ -14,7 +14,7 @@ See also: https://github.com/pre-commit/pre-commit
 Add this to your `.pre-commit-config.yaml`
 
     -   repo: https://github.com/pre-commit/pre-commit-hooks
-        rev: v2.2.3  # Use the ref you want to point at
+        rev: v2.4.0  # Use the ref you want to point at
         hooks:
         -   id: trailing-whitespace
         # -   id: ...
@@ -42,6 +42,7 @@ Add this to your `.pre-commit-config.yaml`
 - `check-json` - Attempts to load all json files to verify syntax.
 - `check-merge-conflict` - Check for files that contain merge conflict strings.
 - `check-symlinks` - Checks for symlinks which do not point to anything.
+- `check-toml` - Attempts to load all TOML files to verify syntax.
 - `check-vcs-permalinks` - Ensures that links to vcs websites are permalinks.
 - `check-xml` - Attempts to load all xml files to verify syntax.
 - `check-yaml` - Attempts to load all yaml files to verify syntax.
@@ -90,15 +91,29 @@ Add this to your `.pre-commit-config.yaml`
   the following commandline options:
     - `--autofix` - automatically format json files
     - `--indent ...` - Control the indentation (either a number for a number of spaces or a string of whitespace).  Defaults to 4 spaces.
+    - `--no-ensure-ascii` preserve unicode characters instead of converting to escape sequences
     - `--no-sort-keys` - when autofixing, retain the original key ordering (instead of sorting the keys)
     - `--top-keys comma,separated,keys` - Keys to keep at the top of mappings.
 - `requirements-txt-fixer` - Sorts entries in requirements.txt and removes incorrect entry for `pkg-resources==0.0.0`
-- `sort-simple-yaml` - Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks.
+- `sort-simple-yaml` - Sorts simple YAML files which consist only of top-level
+  keys, preserving comments and blocks.
+
+  Note that `sort-simple-yaml` by default matches no `files` as it enforces a
+  very specific format.  You must opt in to this by setting `files`, for
+  example:
+
+  ```yaml
+      -   id: sort-simple-yaml
+          files: ^config/simple/
+  ```
+
 - `trailing-whitespace` - Trims trailing whitespace.
     - To preserve Markdown [hard linebreaks](https://github.github.com/gfm/#hard-line-break)
       use `args: [--markdown-linebreak-ext=md]` (or other extensions used
       by your markdownfiles).  If for some reason you want to treat all files
       as markdown, use `--markdown-linebreak-ext=*`.
+    - By default, this hook trims all whitespace from the ends of lines.
+      To specify a custom set of characters to trim instead, use `args: [--chars,"<chars to trim>"]`.
 
 ### Deprecated / replaced hooks
 
